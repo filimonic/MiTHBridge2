@@ -113,8 +113,5 @@ LED Indicator flashes twice each valid (data from sensor) is received.
 
 ## Stat server config examples:
 
-I'm using Telegraf + Prometheus + Nginx for my own
-
-```
-
-```
+I'm using Telegraf + Prometheus + Nginx for my own.
+See [SERVER.md](./extra/SERVER.md)
