@@ -1,0 +1,59 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 1. Генерируем дату для имени GitHub-релиза
+      - name: Generate date tag
+        id: date_tag
+        run: |
+          TAG=$(date +'%Y%m%d%H%M')
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      # 2. Собираем образ и тегируем его полным SHA коммита
+      - name: Build Docker image
+        run: |
+          docker build -f build.dockerfile -t esp32-builder:${{ github.sha }} .
+
+      # 3. Запускаем контейнер из образа с полным SHA
+      - name: Run build script inside container and copy artifacts
+        run: |
+          # Создаем контейнер из образа с полным SHA коммита
+          docker create --name builder esp32-builder:${{ github.sha }}
+          
+          docker start -a builder
+          docker exec builder ./build.esp32c6.xiao_external-antenna.sh
+          
+          mkdir ./local_dist
+          # Замените /app/dist на ваш путь внутри контейнера, если он отличается
+          docker cp builder:/app/dist/. ./local_dist/
+          
+          docker rm builder
+
+      # 4. Создаем релиз по дате
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.date_tag.outputs.tag }}
+          name: Release ${{ steps.date_tag.outputs.tag }}
+          draft: false
+          prerelease: false
+          files: |
+            ./local_dist/**/*.bin
+            ./local_dist/*.bin
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

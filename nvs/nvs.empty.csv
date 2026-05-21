@@ -1,0 +1,6 @@
+key,type,encoding,value
+mithbr2,namespace,,
+W_SSID,data,string,your_wifi_ssid
+W_PSK,data,string,your_wifi_psk
+ILH_URL,data,string,https://example.com/telegraf/post/influx-line
+ILH_AUTH,data,string,Basic eW91cl91c2VybmFtZTp5b3VyX3Bhc3N3b3Jk

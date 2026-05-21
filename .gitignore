@@ -1,0 +1,7 @@
+/build
+/sdkconfig
+/sdkconfig.old
+/firmware.bin
+/nvs/nvs.csv
+/dist/*.bin
+/.vscode

@@ -1,0 +1,127 @@
+menu "MiTH Bridge 2"
+    menu "Startup configuration"
+        config MITHBRIDGE2_STARTUP_TIMEOUT_MINUTES
+            int "Maximum time startup takes (minutes)"
+            default 5
+            range 1 60
+            help
+                If the device cannot connect to WiFi and sync time within this 
+                period, it will perform a software restart.
+    endmenu
+
+    menu "Sensor configuration"
+        config MITHBRIDGE2_MAX_SENSOR_DATA_COUNT
+            int "c"
+            default 128
+            range 1 65535
+            help 
+                Maximum sensors data can be remebered that was not sent to server (see "Send configuration")
+    endmenu
+    
+    menu "Storage configuration"
+        config MITHBRIDGE2_STORAGE_NVS_NS
+            string "NVS Namespace name"
+            default "mithbr2"
+            help 
+                Namespace on NVS Flash to store properties
+    endmenu
+
+    menu "Wi-Fi configuration"
+        config MITHBRIDGE2_WIFI_RECONNECT_DELAY_SECONDS
+            int "Delay before Wi-Fi reconnection attempt (seconds)"
+            default 30
+            range 5 60
+            help
+                Delay before Wi-Fi reconnection attempt (seconds)
+    endmenu
+
+    menu "Send configuration"
+        config MITHBRIDGE2_SEND_INTERVAL_SECONDS
+            int "How often to send collected data (seconds)"
+            default 45
+            range 30 300
+            help 
+                How often to send collected data from sensors
+        config MITHBRIDGE2_SEND_MAX_EMPTY_TIME_MINUTES
+            int "Maximum amount of time (minutes) when no sensor data is sent (any reason)"
+            default 7
+            range 5 30
+            help 
+                Maximum amount of time (minutes) when no sensor data is sent (any reason). If none is sent, device will restart.\
+                Reasons may be: no sensor data, no wifi, other communication problems.
+    endmenu
+
+    menu "LED Flasher Configuration"
+        config MITHBRIDGE2_LED_FLASHER_ENABLED
+        bool "Enable LED Flasher"
+        default y
+        help
+            Enable or disable the LED flasher feature.
+
+        config MITHBRIDGE2_LED_FLASHER_QUEUE_SIZE
+        int "Led flasher event queue size"
+        depends on MITHBRIDGE2_LED_FLASHER_ENABLED
+        range 10 255
+        default 255
+        help
+            Size of queued led flash signals.
+
+        config MITHBRIDGE2_LED_FLASHER_DUPLICATES_ENABLED
+        bool "Flash on duplicate packets too"
+        depends on MITHBRIDGE2_LED_FLASHER_ENABLED
+        default y
+        help
+            Flash duplicate packets too.
+
+        config MITHBRIDGE2_LED_FLASHER_LED_GPIO
+        int "LED GPIO Number"
+        depends on MITHBRIDGE2_LED_FLASHER_ENABLED
+        range 0 39
+        default 15
+        help
+            GPIO number for the LED.
+
+        config MITHBRIDGE2_LED_FLASHER_INVERTED
+        bool "Inverted LED"
+        depends on MITHBRIDGE2_LED_FLASHER_ENABLED
+        default y
+        help
+            Invert LED logic.
+
+        config MITHBRIDGE2_LED_FLASHER_ON_INTERVAL_MS
+        int "LED Flash ON Interval (ms)"
+        depends on MITHBRIDGE2_LED_FLASHER_ENABLED
+        range 100 2000
+        default 150
+        help
+            Duration on ON state of LED. For duplicate packets it's twice (ON + ON). For non-duplicate packets it's 3x (ON + OFF + ON).
+
+        config MITHBRIDGE2_LED_FLASHER_OFF_INTERVAL_MS
+        int "LED Flash OFF Interval (ms)"
+        depends on MITHBRIDGE2_LED_FLASHER_ENABLED
+        range 100 2000
+        default 600
+        help
+            Minimal interval in milliseconds between LED signals.
+    endmenu
+
+#   menu "SNTP Servers (predefined)"
+#       config MITHBRIDGE2_SNTP_SERVER_1_ADDRESS
+#           string "SNTP server 1 address"
+#           default "time.google.com"
+#           help
+#               Enter the Hostname (e.g., pool.ntp.org) or IP Address
+#
+#       config MITHBRIDGE2_SNTP_SERVER_2_ADDRESS
+#           string "SNTP server 2 address"
+#           default "time.cloudflare.com"
+#           help
+#               Enter the Hostname (e.g., pool.ntp.org) or IP Address
+#
+#       config MITHBRIDGE2_SNTP_SERVER_3_ADDRESS
+#           string "SNTP server 3 address"
+#           default "pool.ntp.org"
+#           help
+#               Enter the Hostname (e.g., pool.ntp.org) or IP Address
+#   endmenu
+endmenu
