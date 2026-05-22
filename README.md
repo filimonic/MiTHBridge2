@@ -105,7 +105,7 @@ sensor,sender_id=99:99:99:12:34:56,id=99:99:99:12:34:56 temperature=46.90,uptime
 
 ## Casing
 
-3D Printed casing variant is located in [housing](./housing) folder.
+3D Printed casing variant is located in [casing](./extra/casing) folder.
 
 ## LED Indicator
 
